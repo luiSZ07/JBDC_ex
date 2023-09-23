@@ -27,13 +27,17 @@ public class Main {
             PreparedStatement consulta = conexao.prepareStatement(sql);
             ResultSet resultado = consulta.executeQuery();
             while(resultado.next()){
-                System.out.println("ID: "+resultado.getInt("id"));
-                System.out.println("Nome: "+resultado.getString("nome"));
-                System.out.println("Cidade: "+resultado.getString("cidade"));
+                System.out.println("ID: " + resultado.getInt("id_livro"));
+                System.out.println("ISBN: " + resultado.getInt("isbn"));
+                System.out.println("NOME: " + resultado.getString("nome_livro"));
+                System.out.println("ID DO AUTOR: " + resultado.getInt("id_autor"));
+                System.out.println("DATA DE PUBLICAÇÃO: " + resultado.getDate("data_publicacao"));
+                System.out.println("PREÇO: " + resultado.getFloat("preco_livro"));
+    
             }
         }
-        catch(SQLException e ){
-            throw new RuntimeException("Erro ao consultar"+e.getMessage(),e);
+        catch(SQLException e){
+            throw new RuntimeException("Erro ao consultar" + e.getMessage(), e);
         }
     }
 }
