@@ -5,28 +5,33 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.time.LocalDate;
 
-public class LivroDAO {
+public class LivroDAO implements InterfaceDAO{
 
-    Connection conexao;
-    String sql;
-     
+    Livro colunaAuxiliar;
+    ArrayList<Livro> tabela;
+    Connection conexao = ConexaoFactory.getConnection();
+    
     ArrayList<Livro> listarRegistros(){
-    sql = "SELECT * FROM livro";
+    String sql = "SELECT * FROM livro";
         try {
             PreparedStatement consulta = conexao.prepareStatement(sql);
             ResultSet resultado = consulta.executeQuery();
             while (resultado.next()) {
-                System.out.println("ID: " + resultado.getInt("id_livro"));
-                System.out.println("ISBN: " + resultado.getInt("isbn"));
-                System.out.println("NOME: " + resultado.getString("nome_livro"));
-                System.out.println("ID DO AUTOR: " + resultado.getInt("id_autor"));
-                System.out.println("DATA DE PUBLICAÇÃO: " + resultado.getDate("data_publicacao"));
-                System.out.println("PREÇO: " + resultado.getFloat("preco_livro"));
+                colunaAuxiliar = new Livro(
+                        resultado.getInt("id_livro"),
+                        resultado.getInt("isbn"),
+                        resultado.getString("nome_livro"),
+                        resultado.getInt("id_autor"),
+                        resultado.getDate("data_publicacao"),
+                        resultado.getFloat("preco_livro"));
+                tabela.add(colunaAuxiliar);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao consultar" + e.getMessage(), e);
         }
-        return registros;
+        System.out.println(tabela.get(1));
+        return tabela;
     }
 }

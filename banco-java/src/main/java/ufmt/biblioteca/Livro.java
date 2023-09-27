@@ -1,23 +1,43 @@
 package ufmt.biblioteca;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Livro {
-    short id_livro;
-    String nome_livro;
-    int id_autor;
-    LocalDate data_publicacao;
-    int preco_livro;
+    private int id_livro;
+    private int isbn;
+    private String nome_livro;
+    private int id_autor;
+    private LocalDate data_publicacao;
+    private float preco_livro;
     
-    public Livro(String nome_livro, int id_autor, LocalDate data_publicacao, int preco_livro) {
+    public Livro(int id_livro, int isbn, String nome_livro, int id_autor, Date data_publicacaosql, float preco_livro) {
+        this.id_livro = id_livro;
+        this.isbn = isbn;
         this.nome_livro = nome_livro;
+        this.id_autor = id_autor;
+        this.data_publicacao = data_publicacaosql.toLocalDate();
+        this.preco_livro = preco_livro;
+    }
+
+    public Livro(String nome_livro, int isbn, int id_autor, LocalDate data_publicacao, int preco_livro) {
+        this.nome_livro = nome_livro;
+        this.isbn = isbn;
         this.id_autor = id_autor;
         this.data_publicacao = data_publicacao;
         this.preco_livro = preco_livro;
     }
 
-    public short getId_livro() {
+    public int getId_livro() {
         return id_livro;
+    }
+
+    public int getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(int isbn) {
+        this.isbn = isbn;
     }
 
     public String getNome_livro() {
