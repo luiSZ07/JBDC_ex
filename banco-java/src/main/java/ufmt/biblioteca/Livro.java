@@ -11,10 +11,10 @@ public class Livro {
     private LocalDate data_publicacao;
     private float preco_livro;
 
-    public Livro(int id_livro, int isbn, String nome_livro, Date data_publicacaosql, float preco_livro) {
+    public Livro(int id_livro,  String nome_livro, int isbn, Date data_publicacaosql, float preco_livro) {
         this.id_livro = id_livro;
-        this.isbn = isbn;
         this.nome_livro = nome_livro;
+        this.isbn = isbn;
         this.data_publicacao = data_publicacaosql.toLocalDate();
         this.preco_livro = preco_livro;
     }
@@ -65,11 +65,11 @@ public class Livro {
     public void imprimirLivro() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        System.out.println("---------------------------------------------------------");
+        System.out.println("-------------------------------------------------------------------------");
         System.out.println("| ID      | ISBN   | Nome                | Data Publicacao  | Preco     |");
         System.out.println("---------------------------------------------------------");
         System.out.printf("| %-8d | %-6d | %-20s | %-14s | %-10.2f |\n",
                 id_livro, isbn, nome_livro, data_publicacao.format(formatter), preco_livro);
-        System.out.println("---------------------------------------------------------");
+        System.out.println("--------------------------------------------------------------------------");
     }
 }
