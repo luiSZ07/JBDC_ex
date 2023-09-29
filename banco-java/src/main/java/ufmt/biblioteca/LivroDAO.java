@@ -5,9 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -38,52 +35,6 @@ public class LivroDAO {
         }
     }
 
-    private static LocalDate tratamentoData(String data) {
-        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy");
-        try {
-            java.util.Date dataDate = sdf.parse(data);
-            return dataDate.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-        } catch (ParseException e) {
-            System.out.println("Formato de data inválido. Certifique-se de que a entrada seja válida.");
-            return null;
-        }
-    }
-
-    public static Livro criarLivro(Scanner scanner) {
-
-        System.out.println("NOME: ");
-        String nome_livro = scanner.nextLine();
-
-        System.out.println("ISBN: ");
-        int isbn;
-        while (true) {
-            try {
-                isbn = Integer.parseInt(scanner.nextLine());
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Digite um número válido para o ISBN.");
-            }
-        }
-
-        System.out.println("DATA DE PUBLICACAO [ddmmyy]: ");
-        String data = scanner.nextLine();
-        LocalDate data_publicacao = tratamentoData(data);
-
-        System.out.println("PREÇO[reais]: ");
-        float preco_livro;
-        while (true) {
-            try {
-                preco_livro = Float.parseFloat(scanner.nextLine());
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Digite um número válido para o preço.");
-            }
-        }
-
-        Livro l = new Livro(nome_livro, isbn, data_publicacao, preco_livro);
-        return l;
-    }
-
     public static int cadastrarLivro(Livro l) {
         Connection conexao = ConexaoFactory.getConnection();
         String sql = "INSERT INTO livro (nome_livro, isbn, data_publicacao, preco_livro) VALUES (?,?,?,?)";
@@ -106,9 +57,8 @@ public class LivroDAO {
         }
     }
 
-    public static int excluirLivro() {
+    public static int excluirLivro(Scanner scanner) {
         Connection conexao = ConexaoFactory.getConnection();
-        Scanner scanner = new Scanner(System.in);
         String sql = "DELETE FROM livro WHERE id_livro = ?";
 
         System.out.printf("Insira o id do livro a ser excluido: ");
@@ -124,7 +74,7 @@ public class LivroDAO {
             } else {
                 System.out.println("Nenhum livro foi excluido.");
             }
-            scanner.close();
+            
             conexao.close();
             return rowsAffected;
         } catch (SQLException e) {
@@ -179,7 +129,7 @@ public class LivroDAO {
         System.out.printf("Insira o id do livro a ser alterado: ");
         int id_editar = scanner.nextInt();
         scanner.nextLine();
-        Livro livroAux = criarLivro(scanner);
+        Livro livroAux = new Livro(scanner);
 
         try {
             PreparedStatement consulta = conexao.prepareStatement(sql);

@@ -1,8 +1,11 @@
 package ufmt.biblioteca;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 public class Livro {
     private int id_livro;
@@ -19,11 +22,45 @@ public class Livro {
         this.preco_livro = preco_livro;
     }
 
-    public Livro(String nome_livro, int isbn, LocalDate data_publicacao, float preco_livro) {
-        this.nome_livro = nome_livro;
-        this.isbn = isbn;
-        this.data_publicacao = data_publicacao;
-        this.preco_livro = preco_livro;
+    public Livro(Scanner scanner) {
+      
+        System.out.println("NOME: ");
+        this.nome_livro = scanner.nextLine();
+
+        System.out.println("ISBN: ");
+        while (true) {
+            try {
+                this.isbn = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Digite um número válido para o ISBN.");
+            }
+        }
+
+        System.out.println("DATA DE PUBLICACAO [ddmmyy]: ");
+        String data = scanner.nextLine();
+        this.data_publicacao = tratamentoData(data);
+
+        System.out.println("PREÇO[reais]: ");
+        while (true) {
+            try {
+                this.preco_livro = Float.parseFloat(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Digite um número válido para o preço.");
+            }
+        }
+    }
+
+    private static LocalDate tratamentoData(String data) {
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy");
+        try {
+            java.util.Date dataDate = sdf.parse(data);
+            return dataDate.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+        } catch (ParseException e) {
+            System.out.println("Formato de data inválido. Certifique-se de que a entrada seja válida.");
+            return null;
+        }
     }
 
     public int getId_livro() {
